@@ -1,0 +1,59 @@
+name: AI Code Review
+
+on:
+  pull_request:
+    types: [opened, synchronize]
+
+jobs:
+  ai-review:
+    runs-on: ubuntu-latest
+    permissions:
+      pull-requests: write
+      contents: read
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install uv
+        run: pip install uv
+
+      - name: Install dependencies
+        run: uv sync
+
+      - name: Get changed files
+        id: changed-files
+        run: |
+          echo "files=$(git diff --name-only origin/${{ github.base_ref }}...HEAD | tr '\n' ',')" >> $GITHUB_OUTPUT
+
+      - name: Run AI Orchestrator
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_REPO: ${{ github.repository }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+          PR_TITLE: ${{ github.event.pull_request.title }}
+          CHANGED_FILES: ${{ steps.changed-files.outputs.files }}
+        run: |
+          uv run python -c "
+          import os
+          from core.event_bus import bus
+          import hooks.on_pr_opened
+          import hooks.on_review_complete
+
+          bus.publish('pr.opened', {
+              'number': int(os.environ['PR_NUMBER']),
+              'title': os.environ['PR_TITLE'],
+              'changed_files': [
+                  f for f in os.environ['CHANGED_FILES'].split(',')
+                  if f.strip().endswith('.py')
+              ],
+          })
+          "
