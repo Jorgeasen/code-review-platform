@@ -1,0 +1,5 @@
+git -c credential.helper= push -u origin main
+Te pedirá usuario y contraseña:
+
+Username: Jorgeasen
+Password: pega tu Personal Access Token (ghp_...)
