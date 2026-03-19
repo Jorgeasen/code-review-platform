@@ -3,3 +3,50 @@ Te pedirá usuario y contraseña:
 
 Username: Jorgeasen
 Password: pega tu Personal Access Token (ghp_...)
+
+
+-------------------------------
+
+-Configuración inicial-
+Comando	                    Qué hace
+git init	                Inicializa un repo nuevo en la carpeta actual
+git clone <url>	            Descarga un repo remoto a tu máquina
+git remote add origin <url>	Conecta tu repo local con uno remoto
+
+-Día a día (los más usados)-
+Comando	                    Qué hace
+git status	                Ver qué archivos cambiaron
+git add <archivo>	        Preparar un archivo para commit
+git add .	                Preparar todos los archivos modificados
+git commit -m "mensaje"	    Guardar los cambios con un mensaje
+git push	                Subir commits al repo remoto (GitHub)
+git pull	                Descargar cambios del remoto a tu local
+
+-Ver historial-
+Comando	                    Qué hace
+git log	                    Ver historial de commits
+git log --oneline	        Historial resumido (una línea por commit)
+git diff	                Ver qué cambió en los archivos
+
+-Ramas (branches)-
+Comando	                    Qué hace
+git branch	                Listar ramas locales
+git branch <nombre>	        Crear una rama nueva
+git checkout <rama>	        Cambiar a otra rama
+git checkout -b <rama>	    Crear rama nueva y cambiar a ella
+git merge <rama>	        Fusionar una rama en la actual
+
+-Deshacer cosas-
+Comando	                    Qué hace
+git restore <archivo>	    Descartar cambios no guardados en un archivo
+git reset HEAD <archivo>	Quitar un archivo del staging (después de add)
+git revert <commit>	        Crear un commit que deshace otro commit
+
+-Flujo típico de trabajo-
+
+git pull                    # 1. Traer lo último del remoto
+# ... haces cambios ...
+git status                  # 2. Ver qué cambiaste
+git add .                   # 3. Preparar cambios
+git commit -m "mi cambio"  # 4. Guardar con mensaje
+git push                   # 5. Subir a GitHub
