@@ -1,3 +1,5 @@
+git remote add origin https://github.com/Jorgeasen/code-review-platform.git
+
 git -c credential.helper= push -u origin main
 Te pedirá usuario y contraseña:
 
